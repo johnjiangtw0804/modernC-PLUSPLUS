@@ -1,0 +1,10 @@
+# 🚀 Journey of Learning Modern C++
+
+This project documents my hands-on journey of preparing for C++ interviews by mastering **modern C++ (C++11 and beyond)** concepts such as:
+
+- [x] RAII (Resource Acquisition Is Initialization)
+- [] Smart Pointers: `unique_ptr`, `shared_ptr`
+- [] Rule of 3 and Rule of 5
+- [] Thread-safe programming with `std::mutex` and `std::thread`
+- [] Manual implementation of resource-safe classes
+- [] Deep dive into STL containers and algorithms
