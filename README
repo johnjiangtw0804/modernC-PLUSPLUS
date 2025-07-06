@@ -3,8 +3,102 @@
 This project documents my hands-on journey of preparing for C++ interviews by mastering **modern C++ (C++11 and beyond)** concepts such as:
 
 - [x] RAII (Resource Acquisition Is Initialization)
-- [] Smart Pointers: `unique_ptr`, `shared_ptr`
-- [] Rule of 3 and Rule of 5
-- [] Thread-safe programming with `std::mutex` and `std::thread`
-- [] Manual implementation of resource-safe classes
-- [] Deep dive into STL containers and algorithms
+- [ ] Smart Pointers: `unique_ptr`, `shared_ptr`
+- [ ] Rule of 3 and Rule of 5
+- [ ] Thread-safe programming with `std::mutex` and `std::thread`
+- [ ] Manual implementation of resource-safe classes
+- [ ] Deep dive into STL containers and algorithms
+
+---
+
+## ⚙️ Dependencies
+
+This project may use third-party libraries such as [`cpr`](https://github.com/libcpr/cpr) for HTTP requests, managed via [vcpkg](https://github.com/microsoft/vcpkg).
+
+✅ **Assumption:** You have [vcpkg](https://github.com/microsoft/vcpkg) installed and bootstrapped.
+
+---
+
+## 📦 Install Dependencies
+
+```bash
+# Example: install cpr
+vcpkg install cpr
+```
+
+
+🏗️ Project Setup
+
+1. CMakeLists.txt
+    Create a CMakeLists.txt file at your project root:
+
+    ```txt
+    cmake_minimum_required(VERSION 3.15)
+    project(Concurrency)
+
+
+    set(CMAKE_CXX_STANDARD 20)
+
+    # Find cpr installed by vcpkg
+    find_package(cpr CONFIG REQUIRED)
+
+    add_executable(my_program main.cpp)
+
+    # Link your program with cpr
+    target_link_libraries(my_program PRIVATE cpr::cpr)
+
+    ```
+
+    ✅ Key sections:
+
+    cmake_minimum_required
+
+    project()
+
+    set(CMAKE_CXX_STANDARD)
+
+    find_package() for any vcpkg libraries
+
+    add_executable()
+
+    target_link_libraries()
+
+2. Create CMakePresets.json
+
+    Put this file at your project root. This lets CMake automatically use vcpkg’s toolchain file.
+
+    ```json
+    {
+        "version": 2,
+        "configurePresets": [
+            {
+            "name": "vcpkg",
+            "description": "Configure with vcpkg toolchain",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+            }
+        ]
+    }
+        // Make sure you have this in your rc file export VCPKG_ROOT="PATH TO YOUR VCPKG"
+    ```
+
+3. Run/Build it!
+
+    ```bash
+        # 1. Configure with preset
+        cmake --preset=vcpkg
+
+        # 2. Build
+        cmake --build --preset=vcpkg
+
+        # 3. Run
+        ./build/my_program
+    ```
+
+### NOTE
+
+For Jthread to work on vscode intellisense, add:
+-fexperimental-library in your Compiler arguments

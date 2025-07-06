@@ -4,7 +4,9 @@
 #include <functional>
 #include <mutex>
 #include <condition_variable>
-
+#include <future>
+#include <cpr/cpr.h>
+// /Users/jonathan/vcpkg/installed/arm64-osx/include
 
 using namespace std;
 void test(int X) {
@@ -154,5 +156,59 @@ int main()
         consumers.emplace_back(consumer);
     }
 
+    this_thread::sleep_for(chrono::seconds(5));
+    cout << "------------------Async----------------------------" << endl;
+    function<int(int)> heavyWorker = [](int x){
+        return x * x;
+    };
+    // 你需要一個 thread 的結果
+    future<int> futureValHolder = async(heavyWorker, 12);
+    cout << "I am doing something else here..." << endl;
+    int workResult = futureValHolder.get();
+    cout << workResult << endl;
+
+    cout << "------------------Async WITH CPR for API Call----------------------------" << endl;
+    function<optional<string>()> echoServerPost = []() -> optional<string>
+    {
+        std::string jsonData = R"(
+            {
+              "name": "Jonathan",
+              "role": "Developer"
+            }
+            )";
+        int retryCount = 0;
+        const int maxRetries = 3;
+        const int delaySeconds = 3;
+        string res = "";
+        while (retryCount < maxRetries)
+        {
+            cpr::Response resp = cpr::Post(cpr::Url{"https://echo.free.beeceptor.com"},cpr::Header{{"Content-Type", "application/json"}}, cpr::Body{jsonData});
+            if (resp.error) {
+                cout << "Request error: " << resp.error.message << endl;
+            } else if (resp.status_code == 200) {
+                cout << "Success!\n";
+                return optional<string>{resp.text};
+            } else {
+                cout << "Server responded with status: " << resp.status_code << endl;
+            }
+            retryCount++;
+            if (retryCount < maxRetries) {
+                this_thread::sleep_for(chrono::seconds(delaySeconds));
+            }
+        }
+        cout << "All attempts used.\n";
+        return {};
+    };
+
+    future<optional<string>> asyncFunction = async(echoServerPost);
+    for (int i = 0; i < 5; i++) {
+        cout << "I amd doing some works here..." << i << endl;
+    }
+
+    optional<string> apiRes = asyncFunction.get();
+    if (!apiRes.has_value()) {
+        cout << "Nothing returned from the server, what should I do???" << endl;
+    }
+    cout << apiRes.value() << endl;
     return 0;
 }
