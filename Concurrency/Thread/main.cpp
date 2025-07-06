@@ -9,6 +9,7 @@
 // /Users/jonathan/vcpkg/installed/arm64-osx/include
 
 using namespace std;
+
 void test(int X) {
     cout << "Hello from thread!" << endl;
     cout << "Argument passed in: " << X << endl;
