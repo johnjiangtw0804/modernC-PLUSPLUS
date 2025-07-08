@@ -45,6 +45,8 @@ static condition_variable isFull;
 static condition_variable isEmpty;
 mutex gM;
 
+mutex gM2;
+
 int main()
 {
     // https://en.cppreference.com/w/cpp/thread/thread/thread.html
