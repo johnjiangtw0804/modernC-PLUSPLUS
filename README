@@ -1,14 +1,6 @@
 # 🚀 Journey of Learning Modern C++
 
-This project documents my hands-on journey of preparing for C++ interviews by mastering **modern C++ (C++11 and beyond)** concepts such as:
-
-- [x] RAII (Resource Acquisition Is Initialization)
-- [ ] Smart Pointers: `unique_ptr`, `shared_ptr`
-- [ ] Rule of 3 and Rule of 5
-- [ ] Thread-safe programming with `std::mutex` and `std::thread`
-- [ ] Manual implementation of resource-safe classes
-- [ ] Deep dive into STL containers and algorithms
-
+[Resource](https://www.youtube.com/watch?v=Fn0xBsmact4&list=PLvv0ScY6vfd_ocTP2ZLicgqKnvq50OCXM)
 ---
 
 ## ⚙️ Dependencies
@@ -47,21 +39,6 @@ vcpkg install cpr
     # Link your program with cpr
     target_link_libraries(my_program PRIVATE cpr::cpr)
 
-    ```
-
-    ✅ Key sections:
-
-    cmake_minimum_required
-
-    project()
-
-    set(CMAKE_CXX_STANDARD)
-
-    find_package() for any vcpkg libraries
-
-    add_executable()
-
-    target_link_libraries()
 
 2. Create CMakePresets.json
 

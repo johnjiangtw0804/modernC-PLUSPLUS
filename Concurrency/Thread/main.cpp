@@ -212,6 +212,7 @@ int main()
     if (!apiRes.has_value()) {
         cout << "Nothing returned from the server, what should I do???" << endl;
     }
+
     cout << apiRes.value() << endl;
     return 0;
 }
